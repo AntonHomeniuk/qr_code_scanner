@@ -54,6 +54,8 @@ public class QRView:NSObject,FlutterPlatformView {
                     self?.pauseCamera()
                 case "resumeCamera":
                     self?.resumeCamera()
+                case "stopCamera":
+                    self?.stopCamera()
                 default:
                     result(FlutterMethodNotImplemented)
                     return
@@ -87,7 +89,7 @@ public class QRView:NSObject,FlutterPlatformView {
     func pauseCamera() {
         if let sc: MTBBarcodeScanner = scanner {
             if sc.isScanning() {
-                sc.stopScanning()
+                sc.freezeCapture()
             }
         }
     }
@@ -97,6 +99,12 @@ public class QRView:NSObject,FlutterPlatformView {
             if !sc.isScanning() {
                 sc.unfreezeCapture()
             }
+        }
+    }
+    
+     func stopCamera() {
+        if let sc: MTBBarcodeScanner = scanner {
+            sc.stopScanning()
         }
     }
 }
