@@ -42,7 +42,7 @@ class QRView(private val registrar: PluginRegistry.Registrar, id: Int) :
         registrar.activity().application.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
             override fun onActivityPaused(p0: Activity?) {
                 if (p0 == registrar.activity()) {
-                    onPauseCameraEnabled = barcodeView?.pause()
+                    onPauseCameraEnabled = barcodeView?.isPreviewActive
                     barcodeView?.pause()
                 }
             }
