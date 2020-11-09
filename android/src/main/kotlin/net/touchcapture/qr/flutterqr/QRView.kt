@@ -31,6 +31,7 @@ class QRView(private val registrar: PluginRegistry.Registrar, id: Int) :
     var cameraPermissionContinuation: Runnable? = null
     var requestingPermission = false
     private var isTorchOn: Boolean = false
+    private var onPauseCameraEnabled: Boolean? = false
     val channel: MethodChannel
 
     init {
@@ -41,13 +42,15 @@ class QRView(private val registrar: PluginRegistry.Registrar, id: Int) :
         registrar.activity().application.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
             override fun onActivityPaused(p0: Activity?) {
                 if (p0 == registrar.activity()) {
+                    onPauseCameraEnabled = barcodeView?.pause()
                     barcodeView?.pause()
                 }
             }
 
             override fun onActivityResumed(p0: Activity?) {
                 if (p0 == registrar.activity()) {
-                    barcodeView?.resume()
+                    if (onPauseCameraEnabled == true)
+                        barcodeView?.resume()
                 }
             }
 
@@ -170,6 +173,9 @@ class QRView(private val registrar: PluginRegistry.Registrar, id: Int) :
             }
             "resumeCamera" -> {
                 resumeCamera()
+            }
+            "stopCamera" -> {
+                pauseCamera()
             }
         }
     }
